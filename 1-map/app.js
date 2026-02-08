@@ -1,8 +1,11 @@
 "use strict";
 
-array = [
+const array = [
   { id: 1, name: "Вася" },
   { id: 2, name: "Петя" },
   { id: 1, name: "Вася" },
 ];
-a;
+
+const newSet = new Set(array.map((item) => item.name));
+
+console.log(newSet);
