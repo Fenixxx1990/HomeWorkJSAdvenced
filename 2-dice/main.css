@@ -1,0 +1,8 @@
+.main_logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main_logo img {
+  height: 390px;
+}
