@@ -1,17 +1,8 @@
 "use strict";
 
-const array = [
-  { id: 1, name: "Вася" },
-  { id: 2, name: "Петя" },
-  { id: 1, name: "Вася" },
-  { id: 2, name: "Петя" },
-];
+function rollOfDice(diceModel) {
+  const maxValue = Number(diceModel.replace("d", ""));
+  return Math.floor(Math.random() * maxValue + 1);
+}
 
-const newSet = new Set(array.map((item) => item.name));
-
-const clearArray = [...newSet].map((name) => ({
-  id: array.find((item) => item.name === name).id,
-  name: name,
-}));
-
-console.log(clearArray);
+console.log(rollOfDice("d20"));
