@@ -8,5 +8,7 @@
 }
 .h1 {
   text-align: center;
-  color: rgb(170, 103, 114);
+  background: linear-gradient(90deg, red, blue);
+  background-clip: text;
+  color: transparent;
 }
