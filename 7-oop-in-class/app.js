@@ -1,36 +1,52 @@
-const Pers = function (race, name, language) {
-  this.race = race;
-  this.name = name;
-  this.language = language;
-};
+"use strict";
 
-Pers.prototype.speak = function () {
-  console.log(this.language, this.name);
-};
+class Personage {
+  constructor(race, name, language) {
+    this.race = race;
+    this.name = name;
+    this.language = language;
+  }
 
-const OrcClass = function (race, name, language) {
-  Pers.call(this, race, name, language);
-};
+  #_speak(message) {
+    console.log(`${this.name} говорит на ${this.language}: ${message}`);
+  }
 
-OrcClass.prototype = Object.create(Pers.prototype);
+  talk(message) {
+    this.#_speak(message);
+  }
+}
 
-OrcClass.prototype.kick = function () {
-  console.log("I kick");
-};
+class Ork extends Personage {
+  constructor(name, language, weapon) {
+    super("Ork", name, language);
+    this.weapon = weapon;
+  }
+  kick() {
+    console.log(`${this.name} ударил ${this.weapon}`);
+  }
 
-const ELfClass = function (race, name, language) {
-  Pers.call(this, race, name, language);
-};
+  talk(message) {
+    super.talk(message + ` размахивая ${this.weapon}`);
+  }
+}
 
-ELfClass.prototype = Object.create(Pers.prototype);
+class Elf extends Personage {
+  constructor(name, language, magic) {
+    super("Elf", name, language);
+    this.magic = magic;
+  }
+  createMagick() {
+    console.log(`${this.name} создал магию ${this.magic}`);
+  }
+  talk(message) {
+    super.talk(message + " растягивая слова");
+  }
+}
 
-ELfClass.prototype.createMagick = function () {
-  console.log("I create magick");
-};
+const ork = new Ork("Grom", "Orkish", "Gisarm");
+ork.talk("Hello");
+ork.kick();
 
-const orc = new OrcClass("Orc", "Grom", "Orcish");
-orc.kick();
-orc.speak();
-const elf = new ELfClass("Elf", "Legolas", "Elvish");
+const elf = new Elf("Legolas", "Elvish", "Fire");
+elf.talk("Hello");
 elf.createMagick();
-elf.speak();
