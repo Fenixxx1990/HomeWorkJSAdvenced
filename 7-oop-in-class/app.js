@@ -1,34 +1,36 @@
-"use strict";
+const Pers = function (race, name, language) {
+  this.race = race;
+  this.name = name;
+  this.language = language;
+};
 
-class Car {
-  #mileage;
-  #mark;
-  #model;
-  constructor(mark, model, mileage) {
-    this.#mark = mark;
-    this.#model = model;
-    this.#mileage = mileage;
-  }
-  info() {
-    return `
-    Марка: ${this.#mark}
-    Модель: ${this.#model}
-    Пробег: ${this.#mileage}
-    `;
-  }
-  set mileage(value) {
-    this.#mileage = value;
-  }
-  get mileage() {
-    return this.#mileage;
-  }
-}
+Pers.prototype.speak = function () {
+  console.log(this.language, this.name);
+};
 
-const prius = new Car("Toyota", "Prius", "50000");
+const OrcClass = function (race, name, language) {
+  Pers.call(this, race, name, language);
+};
 
-console.log(prius);
-console.log(prius.info());
-prius.mileage = 100000;
-console.log(prius.mileage);
-console.log(prius);
-console.log(prius.info());
+OrcClass.prototype = Object.create(Pers.prototype);
+
+OrcClass.prototype.kick = function () {
+  console.log("I kick");
+};
+
+const ELfClass = function (race, name, language) {
+  Pers.call(this, race, name, language);
+};
+
+ELfClass.prototype = Object.create(Pers.prototype);
+
+ELfClass.prototype.createMagick = function () {
+  console.log("I create magick");
+};
+
+const orc = new OrcClass("Orc", "Grom", "Orcish");
+orc.kick();
+orc.speak();
+const elf = new ELfClass("Elf", "Legolas", "Elvish");
+elf.createMagick();
+elf.speak();
