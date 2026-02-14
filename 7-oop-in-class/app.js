@@ -1,34 +1,52 @@
 "use strict";
 
-class Car {
-  #mileage;
-  #mark;
-  #model;
-  constructor(mark, model, mileage) {
-    this.#mark = mark;
-    this.#model = model;
-    this.#mileage = mileage;
+class Personage {
+  constructor(race, name, language) {
+    this.race = race;
+    this.name = name;
+    this.language = language;
   }
-  info() {
-    return `
-    Марка: ${this.#mark}
-    Модель: ${this.#model}
-    Пробег: ${this.#mileage}
-    `;
+
+  #_speak(message) {
+    console.log(`${this.name} говорит на ${this.language}: ${message}`);
   }
-  set mileage(value) {
-    this.#mileage = value;
-  }
-  get mileage() {
-    return this.#mileage;
+
+  talk(message) {
+    this.#_speak(message);
   }
 }
 
-const prius = new Car("Toyota", "Prius", "50000");
+class Ork extends Personage {
+  constructor(name, language, weapon) {
+    super("Ork", name, language);
+    this.weapon = weapon;
+  }
+  kick() {
+    console.log(`${this.name} ударил ${this.weapon}`);
+  }
 
-console.log(prius);
-console.log(prius.info());
-prius.mileage = 100000;
-console.log(prius.mileage);
-console.log(prius);
-console.log(prius.info());
+  talk(message) {
+    super.talk(message + ` размахивая ${this.weapon}`);
+  }
+}
+
+class Elf extends Personage {
+  constructor(name, language, magic) {
+    super("Elf", name, language);
+    this.magic = magic;
+  }
+  createMagick() {
+    console.log(`${this.name} создал магию ${this.magic}`);
+  }
+  talk(message) {
+    super.talk(message + " растягивая слова");
+  }
+}
+
+const ork = new Ork("Grom", "Orkish", "Gisarm");
+ork.talk("Hello");
+ork.kick();
+
+const elf = new Elf("Legolas", "Elvish", "Fire");
+elf.talk("Hello");
+elf.createMagick();
