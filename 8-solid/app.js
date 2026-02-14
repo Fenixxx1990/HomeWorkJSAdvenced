@@ -1,52 +1,61 @@
 "use strict";
-a = 1;
-class Personage {
-  constructor(race, name, language) {
-    this.race = race;
-    this.name = name;
-    this.language = language;
+
+class Billing {
+  constructor(amount) {
+    if (amount < 0) {
+      throw new Error("Amount не может быть отрицательным");
+    }
+    this.amount = amount;
   }
 
-  #_speak(message) {
-    console.log(`${this.name} говорит на ${this.language}: ${message}`);
-  }
-
-  talk(message) {
-    this.#_speak(message);
+  // Абстрактный метод — должен быть переопределён в подклассах
+  calculateTotal() {
+    throw new Error(
+      "Метод calculateTotal() должен быть реализован в подклассе",
+    );
   }
 }
 
-class Ork extends Personage {
-  constructor(name, language, weapon) {
-    super("Ork", name, language);
-    this.weapon = weapon;
-  }
-  kick() {
-    console.log(`${this.name} ударил ${this.weapon}`);
-  }
-
-  talk(message) {
-    super.talk(message + ` размахивая ${this.weapon}`);
+class FixBilling extends Billing {
+  calculateTotal() {
+    return this.amount; // просто возвращаем amount
   }
 }
 
-class Elf extends Personage {
-  constructor(name, language, magic) {
-    super("Elf", name, language);
-    this.magic = magic;
+class HourBilling extends Billing {
+  constructor(amount, hours) {
+    super(amount);
+    if (hours < 0) {
+      throw new Error("Часы не могут быть отрицательными");
+    }
+    this.hours = hours;
   }
-  createMagick() {
-    console.log(`${this.name} создал магию ${this.magic}`);
-  }
-  talk(message) {
-    super.talk(message + " растягивая слова");
+
+  calculateTotal() {
+    return this.amount * this.hours; // amount × часы
   }
 }
 
-const ork = new Ork("Grom", "Orkish", "Gisarm");
-ork.talk("Hello");
-ork.kick();
+class ItemBilling extends Billing {
+  constructor(amount, itemsCount) {
+    super(amount);
+    if (itemsCount < 0) {
+      throw new Error("Количество элементов не может быть отрицательным");
+    }
+    this.itemsCount = itemsCount;
+  }
 
-const elf = new Elf("Legolas", "Elvish", "Fire");
-elf.talk("Hello");
-elf.createMagick();
+  calculateTotal() {
+    return this.amount * this.itemsCount; // amount × количество
+  }
+}
+
+// Создаём разные типы биллингов
+const fix = new FixBilling(1000);
+const hour = new HourBilling(500, 3); // 500 ₽/час × 3 часа
+const item = new ItemBilling(200, 5); // 200 ₽/ед × 5 ед.
+
+// Единый интерфейс — разный результат
+console.log(fix.calculateTotal()); // 1000
+console.log(hour.calculateTotal()); // 1500
+console.log(item.calculateTotal());
