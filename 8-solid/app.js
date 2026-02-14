@@ -1,5 +1,5 @@
 "use strict";
-
+a = 1;
 class Personage {
   constructor(race, name, language) {
     this.race = race;
