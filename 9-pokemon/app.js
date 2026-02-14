@@ -1,61 +1,40 @@
-"use strict";
-
-class Billing {
-  constructor(amount) {
-    if (amount < 0) {
-      throw new Error("Amount не может быть отрицательным");
-    }
-    this.amount = amount;
-  }
-
-  // Абстрактный метод — должен быть переопределён в подклассах
-  calculateTotal() {
-    throw new Error(
-      "Метод calculateTotal() должен быть реализован в подклассе",
+// Функция для получения и вывода описания первой способности Ditto
+async function getDittoAbilityDescription() {
+  try {
+    // Шаг 1: запрос к /pokemon/ditto
+    const dittoResponse = await fetch(
+      "https://pokeapi.co/api/v2/pokemon/ditto",
     );
-  }
-}
-
-class FixBilling extends Billing {
-  calculateTotal() {
-    return this.amount; // просто возвращаем amount
-  }
-}
-
-class HourBilling extends Billing {
-  constructor(amount, hours) {
-    super(amount);
-    if (hours < 0) {
-      throw new Error("Часы не могут быть отрицательными");
+    if (!dittoResponse.ok) {
+      throw new Error(`Ошибка запроса Ditto: ${dittoResponse.status}`);
     }
-    this.hours = hours;
-  }
+    const dittoData = await dittoResponse.json();
 
-  calculateTotal() {
-    return this.amount * this.hours; // amount × часы
-  }
-}
+    // Шаг 2: берём URL первой способности
+    const firstAbilityUrl = dittoData.abilities[0].ability.url;
 
-class ItemBilling extends Billing {
-  constructor(amount, itemsCount) {
-    super(amount);
-    if (itemsCount < 0) {
-      throw new Error("Количество элементов не может быть отрицательным");
+    // Шаг 3: запрос к URL способности
+    const abilityResponse = await fetch(firstAbilityUrl);
+    if (!abilityResponse.ok) {
+      throw new Error(`Ошибка запроса способности: ${abilityResponse.status}`);
     }
-    this.itemsCount = itemsCount;
-  }
+    const abilityData = await abilityResponse.json();
 
-  calculateTotal() {
-    return this.amount * this.itemsCount; // amount × количество
+    // Шаг 4: ищем английское описание (effect_entries)
+    const englishEntry = abilityData.effect_entries.find(
+      (entry) => entry.language.name === "en",
+    );
+
+    // Шаг 5: выводим описание в консоль
+    if (englishEntry) {
+      console.log(englishEntry.effect);
+    } else {
+      console.log("Английское описание не найдено.");
+    }
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
   }
 }
 
-// Создаём разные типы биллингов
-const fix = new FixBilling(1000);
-const hour = new HourBilling(500, 3); // 500 ₽/час × 3 часа
-const item = new ItemBilling(200, 5); // 200 ₽/ед × 5 ед.
-
-// Единый интерфейс — разный результат
-console.log(fix.calculateTotal()); // 1000
-console.log(hour.calculateTotal()); // 1500
-console.log(item.calculateTotal());
+// Запускаем функцию
+getDittoAbilityDescription();
