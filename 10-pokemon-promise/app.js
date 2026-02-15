@@ -26,7 +26,7 @@ function getDittoAbilityDescription() {
       }
     })
     .catch((error) => {
-      console.log("Произошла ошибка:", error);
+      console.error("Произошла ошибка:", error);
     });
 }
 
