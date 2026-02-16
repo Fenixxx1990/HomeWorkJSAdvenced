@@ -1,34 +1,35 @@
 "use strict";
 
-function getData(url, method = "GET") {
-  return fetch(url, { method }).then((response) => {
-    if (!response.ok) {
-      throw new Error(`Ошибка запроса: ${response.status}`);
+function createPromise(latitude, longitude) {
+  return new Promise((resolve, reject) => {
+    if (typeof latitude === "number" && typeof longitude === "number") {
+      resolve([latitude, longitude]);
+    } else {
+      reject(new Error("Invalid coordinates"));
     }
-    return response.json();
   });
 }
 
-function getDittoAbilityDescription() {
-  getData("https://pokeapi.co/api/v2/pokemon/ditto")
-    .then((dittoData) => {
-      const firstAbilityUrl = dittoData.abilities[0].ability.url;
-      return getData(firstAbilityUrl);
-    })
-    .then((abilityData) => {
-      const englishEntry = abilityData.effect_entries.find(
-        (entry) => entry.language.name === "en",
-      );
-      if (englishEntry) {
-        console.log(englishEntry.effect);
-      } else {
-        console.log("Английское описание не найдено.");
-      }
-    })
-    .catch((error) => {
-      console.error("Произошла ошибка:", error);
-    });
+function getGeolocation() {
+  return new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(position),
+      (error) => reject(error),
+    );
+  });
 }
 
-// Запускаем функцию
-getDittoAbilityDescription();
+(async () => {
+  try {
+    const position = await getGeolocation();
+    console.log(position);
+    const promise = createPromise(
+      position.coords.latitude,
+      position.coords.longitude,
+    );
+
+    promise.then((data) => console.log(data)); // [широта, долгота]
+  } catch (error) {
+    console.error("Ошибка геолокации:", error.message);
+  }
+})();
