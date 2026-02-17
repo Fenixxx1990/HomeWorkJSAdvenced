@@ -1,29 +1,18 @@
 "use strict";
 
-function race(promises) {
-  // Проверяем, что передан массив
-  if (!Array.isArray(promises)) {
-    return Promise.reject(new TypeError("Argument must be an array"));
-  }
+const counter = document.querySelector(".counter");
+const buttons = document.querySelector(".buttons");
 
-  // Если массив пустой — сразу отклоняем
-  if (promises.length === 0) {
-    return Promise.reject(new Error("Array must contain at least one promise"));
-  }
-
-  return new Promise((resolve, reject) => {
-    // Проходим по всем промисам
-    promises.forEach((promise) => {
-      // Гарантируем, что элемент — промис (или преобразуем в промис)
-      Promise.resolve(promise)
-        .then((value) => {
-          // Первый успешно разрешённый промис — сразу resolve
-          resolve(value);
-        })
-        .catch((error) => {
-          // Первый отклонённый промис — сразу reject
-          reject(error);
-        });
-    });
-  });
+if (!counter || !buttons) {
+  throw new Error("Element not found");
 }
+let buttonLast;
+buttons.addEventListener("click", (event) => {
+  const elClick = event.target;
+  elClick.innerText = "Нажата";
+  counter.innerText = Number(counter.innerText) + 1;
+  if (buttonLast) {
+    buttonLast.innerText = "Не нажата";
+  }
+  buttonLast = elClick;
+});
