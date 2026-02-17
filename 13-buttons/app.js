@@ -9,7 +9,11 @@ if (!counter || !buttons) {
 let buttonLast;
 buttons.addEventListener("click", (event) => {
   const elClick = event.target;
-  elClick.innerText = "Нажата";
+  if (elClick === buttonLast) {
+    counter.innerText = Number(counter.innerText) + 1;
+    return;
+  }
+  elClick.innerText = "Нажата!";
   counter.innerText = Number(counter.innerText) + 1;
   if (buttonLast) {
     buttonLast.innerText = "Не нажата";
