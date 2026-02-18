@@ -1,0 +1,43 @@
+.main_logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.main_logo img {
+  height: 390px;
+}
+.h1 {
+  text-align: center;
+  background: linear-gradient(90deg, red, blue);
+  background-clip: text;
+  color: transparent;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.wrapper_count {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 15px;
+  margin-top: 15px;
+}
+
+.button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
